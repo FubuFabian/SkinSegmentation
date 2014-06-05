@@ -1,0 +1,14 @@
+ObjectType = Image
+NDims = 3
+BinaryData = True
+BinaryDataByteOrderMSB = False
+CompressedData = True
+CompressedDataSize = 8675107
+TransformMatrix = 1 0 0 0 1 0 0 0 1
+Offset = -371.42 -352.057 30.501
+CenterOfRotation = 0 0 0
+ElementSpacing = 0.276978 0.330828 0.330828
+DimSize = 377 371 178
+AnatomicalOrientation = ???
+ElementType = MET_UCHAR
+ElementDataFile = PBM_03.raw

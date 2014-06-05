@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SkinImageSegmentationWidget</class>
+ <widget class="QWidget" name="SkinImageSegmentationWidget">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>423</width>
+    <height>211</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>SkinImageSegmentationWidget</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout_3">
+     <item>
+      <widget class="QPushButton" name="surfaceBtn_2">
+       <property name="text">
+        <string>Surface</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="thresholdBtn_2">
+       <property name="text">
+        <string>Threshold</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="0">
+    <widget class="QSlider" name="upperSlider">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QSlider" name="lowerSlider">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_4">
+     <item>
+      <widget class="QLineEdit" name="lowerThreshold_2">
+       <property name="maximumSize">
+        <size>
+         <width>51</width>
+         <height>22</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="upperThreshold_2">
+       <property name="maximumSize">
+        <size>
+         <width>51</width>
+         <height>22</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <resources/>
+ <connections>
+  <connection>
+   <sender>surfaceBtn_2</sender>
+   <signal>clicked()</signal>
+   <receiver>SkinImageSegmentationWidget</receiver>
+   <slot>surfaceEnhancement()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>49</x>
+     <y>39</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>6</x>
+     <y>64</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>upperSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>SkinImageSegmentationWidget</receiver>
+   <slot>changeUpperThreshold(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>140</x>
+     <y>88</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>163</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lowerSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>SkinImageSegmentationWidget</receiver>
+   <slot>changeLowerThreshold(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>213</x>
+     <y>125</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>218</x>
+     <y>145</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>thresholdBtn_2</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>SkinImageSegmentationWidget</receiver>
+   <slot>threshold(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>346</x>
+     <y>30</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>320</x>
+     <y>66</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>surfaceEnhancement()</slot>
+  <slot>threshold(bool)</slot>
+  <slot>changeLowerThreshold(int)</slot>
+  <slot>changeUpperThreshold(int)</slot>
+ </slots>
+</ui>
