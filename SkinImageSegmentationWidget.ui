@@ -7,14 +7,14 @@
     <x>0</x>
     <y>0</y>
     <width>423</width>
-    <height>211</height>
+    <height>336</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>SkinImageSegmentationWidget</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0" colspan="2">
+   <item row="0" column="0">
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <item>
       <widget class="QPushButton" name="surfaceBtn_2">
@@ -99,6 +99,42 @@
      </item>
     </layout>
    </item>
+   <item row="4" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QTableWidget" name="tableWidget">
+       <column>
+        <property name="text">
+         <string>X</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Y</string>
+        </property>
+       </column>
+      </widget>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QPushButton" name="deleteSeedBtn">
+         <property name="text">
+          <string>Delete Seed</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton">
+         <property name="text">
+          <string>Region Growing</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </item>
+    </layout>
+   </item>
   </layout>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
@@ -127,8 +163,8 @@
    <slot>changeUpperThreshold(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>140</x>
-     <y>88</y>
+     <x>149</x>
+     <y>77</y>
     </hint>
     <hint type="destinationlabel">
      <x>163</x>
@@ -143,8 +179,8 @@
    <slot>changeLowerThreshold(int)</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>213</x>
-     <y>125</y>
+     <x>222</x>
+     <y>111</y>
     </hint>
     <hint type="destinationlabel">
      <x>218</x>
@@ -168,11 +204,45 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>deleteSeedBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>SkinImageSegmentationWidget</receiver>
+   <slot>deleteSeed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>372</x>
+     <y>197</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>328</x>
+     <y>141</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>pushButton</sender>
+   <signal>clicked()</signal>
+   <receiver>SkinImageSegmentationWidget</receiver>
+   <slot>regionGrowing()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>344</x>
+     <y>270</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>418</x>
+     <y>281</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>surfaceEnhancement()</slot>
   <slot>threshold(bool)</slot>
   <slot>changeLowerThreshold(int)</slot>
   <slot>changeUpperThreshold(int)</slot>
+  <slot>deleteSeed()</slot>
+  <slot>regionGrowing()</slot>
  </slots>
 </ui>

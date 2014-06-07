@@ -61,11 +61,13 @@ private:
     
     bool seedPointFlag; ///< indicates if the seed piont has been selected
     
-    ImageType::IndexType seedPoint;  ///< the region growing seed point
+    std::vector<ImageType::IndexType> seedPoints; ///< the region growing seed point
     
     int lowerThreshVal;
     
     int upperThreshVal;
+    
+    int numberOfSeeds;
 
 private slots:
 
@@ -74,10 +76,12 @@ private slots:
     void changeLowerThreshold(int);
     void changeUpperThreshold(int);
     
+    void regionGrowing();
+    
     /**
      * \brief choose a new seed point
      */
-    void newSeed();
+    void deleteSeed();
     
     /**
     * \brief get the cross point coordinates

@@ -91,7 +91,8 @@ SET(AppHeaders mainwindow.h QVTKImageWidget.h QVTKImageWidgetCommand.h
     itkImageToVTKImageFilter.h itkVTKImageToImageFilter.h ImageSegmentation.h
     ImageSegmentationWidget.h VolumeSegmentation.h VolumeSegmentationWidget.h
     VolumeReconstructionPBM.h VolumeReconstruction.h SkinImageSegmentation.h
-    SkinImageSegmentationWidget.h itkSurfaceEnhancementImageFilter.h)
+    SkinImageSegmentationWidget.h itkSurfaceEnhancementImageFilter.h
+    itkSobelOperator5.h itkSobelEdgeDetectionImageFilter5.h)
     
 SET(AppUI mainwindow.ui ProbeCalibrationWidget.ui VolumeReconstructionWidget.ui 
     CropImagesWidget.ui Scene3DWidget.ui CheckCalibrationErrorWidget.ui

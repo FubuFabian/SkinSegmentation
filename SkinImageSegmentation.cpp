@@ -2,6 +2,7 @@
 #include "itkImageToVTKImageFilter.h"
 #include "itkVTKImageToImageFilter.h"
 #include "itkSurfaceEnhancementImageFilter.h"
+#include "itkSobelEdgeDetectionImageFilter5.h"
 
 #include <itkImageRegionIterator.h>
 #include <itkImageDuplicator.h>
@@ -15,6 +16,7 @@
 #include <itkGradientAnisotropicDiffusionImageFilter.h>
 #include <itkBinaryThresholdImageFilter.h>
 #include <itkMaximumImageFilter.h>
+#include <itkSobelEdgeDetectionImageFilter.h>
 #include <itkRGBPixel.h>
 
 #include <vtkImageLuminance.h>
@@ -35,19 +37,28 @@ void SkinImageSegmentation::computeSurfaceImage()
     anisotropicFilter->SetConductanceParameter(3);
     anisotropicFilter->Update();
     
+/////////////////       SOBEL       ////////////////////////
+    
+    typedef itk::SobelEdgeDetectionImageFilter5<FloatImageType, FloatImageType> SobelEdgeDetectionImageFilterType5;
+    SobelEdgeDetectionImageFilterType5::Pointer surfaceFilter = SobelEdgeDetectionImageFilterType5::New();
+    surfaceFilter->SetInput(anisotropicFilter->GetOutput());
+    surfaceFilter->Update();
+    
+///////////////////////////////////////////////////////////
+    
 /////////////////       SATO        ////////////////////////
     
-    typedef itk::SurfaceEnhancementImageFilter<FloatImageType, FloatImageType> SurfaceFilterType;
-    SurfaceFilterType::Pointer surfaceFilter = SurfaceFilterType::New();
-    
-    surfaceFilter->SetInput(anisotropicFilter->GetOutput());
-    surfaceFilter->SetMinScale(10);
-    surfaceFilter->SetMaxScale(10);
-    surfaceFilter->SetAlpha(1);
-    surfaceFilter->SetGamma(0.1);
-    surfaceFilter->SetScaleStep(1);
-   
-    surfaceFilter->Update();
+//    typedef itk::SurfaceEnhancementImageFilter<FloatImageType, FloatImageType> SurfaceFilterType;
+//    SurfaceFilterType::Pointer surfaceFilter = SurfaceFilterType::New();
+//    
+//    surfaceFilter->SetInput(anisotropicFilter->GetOutput());
+//    surfaceFilter->SetMinScale(1);
+//    surfaceFilter->SetMaxScale(4);
+//    surfaceFilter->SetAlpha(1);
+//    surfaceFilter->SetGamma(0.1);
+//    surfaceFilter->SetScaleStep(1);
+//   
+//    surfaceFilter->Update();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -78,15 +89,15 @@ void SkinImageSegmentation::computeSurfaceImage()
 //
 //
 //    typedef itk::MultiScaleHessianBasedMeasureImageFilter<FloatImageType, TensorImageType, FloatImageType > MultiScaleHessianFilterType;
-//    MultiScaleHessianFilterType::Pointer multiScaleHessianFilterFilter = MultiScaleHessianFilterType::New();
+//    MultiScaleHessianFilterType::Pointer surfaceFilter = MultiScaleHessianFilterType::New();
 //
-//    multiScaleHessianFilterFilter->SetInput(anisotropicFilter->GetOutput());
-//    multiScaleHessianFilterFilter->SetHessianToMeasureFilter(objectnessFilter);
-//    multiScaleHessianFilterFilter->SetSigmaStepMethodToEquispaced();
-//    multiScaleHessianFilterFilter->SetSigmaMinimum(10);
-//    multiScaleHessianFilterFilter->SetSigmaMaximum(10);
-//    multiScaleHessianFilterFilter->SetNumberOfSigmaSteps(1);
-//    multiScaleHessianFilterFilter->Update();   
+//    surfaceFilter->SetInput(anisotropicFilter->GetOutput());
+//    surfaceFilter->SetHessianToMeasureFilter(objectnessFilter);
+//    surfaceFilter->SetSigmaStepMethodToEquispaced();
+//    surfaceFilter->SetSigmaMinimum(1);
+//    surfaceFilter->SetSigmaMaximum(3);
+//    surfaceFilter->SetNumberOfSigmaSteps(3);
+//    surfaceFilter->Update();   
     
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -134,59 +145,55 @@ void SkinImageSegmentation::computeThresholdImage(float lowerThreshold, float up
 
 void SkinImageSegmentation::computeRegionGrowing()
 {
+
 //    this->contourPixels.clear();
 //    
-//    typedef itk::ConnectedThresholdImageFilter<FloatImageType,FloatImageType> RegionGrowingType;
-//    RegionGrowingType::Pointer regionGrowing = RegionGrowingType::New();
-//    
-//    regionGrowing->SetInput(probabilityImage);
-//    
-//    FloatImageType::SizeType imageSize;
-//    imageSize = probabilityImage->GetLargestPossibleRegion().GetSize();
-//    
-//    seedPoint[1] = imageSize[1] - seedPoint[1]; 
-//    
-//    regionGrowing->SetSeed(seedPoint);
-//    regionGrowing->SetReplaceValue(255);
-//    
-//    typedef itk::NeighborhoodIterator<FloatImageType> NeighborhoodIterator;
-//    NeighborhoodIterator::RadiusType radius;
-//    radius.Fill(1);
-//    
-//    FloatImageType::RegionType seedRegion;
-//    
-//    FloatImageType::RegionType::IndexType seedRegionIndex;
-//    seedRegionIndex[0] = seedPoint[0] - 1;
-//    seedRegionIndex[1] = seedPoint[1] - 1;
-//    seedRegion.SetIndex(seedRegionIndex);
-//    
-//    FloatImageType::RegionType::SizeType seedRegionSize;
-//    seedRegionSize.Fill(3); 
-//    
-//    NeighborhoodIterator it(radius,probabilityImage,seedRegion);
-//    
-//    float accum = 0;
-//    for (unsigned int i = 0; i < it.Size(); ++i){    
-//        accum += it.GetPixel(i);  
-//    }
-//    
-//    float seedRegionMean = accum/(float)it.Size();
-//    
-//    float upperThreshold = seedRegionMean + seedRegionMean*0.55;
-//    float lowerThreshold = seedRegionMean - seedRegionMean*0.55;
-//    
-//    regionGrowing->SetUpper(upperThreshold);
-//    regionGrowing->SetLower(lowerThreshold);
-//
-//    regionGrowing->Update();
-//    
-//    typedef itk::GrayscaleFillholeImageFilter<FloatImageType,FloatImageType> FillHolesType;
-//    FillHolesType::Pointer fillHoles = FillHolesType::New();
-//    fillHoles->SetInput(regionGrowing->GetOutput());
-//    fillHoles->Update();
-//    
-//    this->vtkRegionGrowingImage = this->convertToVTKImage(fillHoles->GetOutput());
-// 
+    
+    FloatImageType::Pointer regionGrowingImage = FloatImageType::New();
+    
+    FloatImageType::RegionType region;
+    region = thresholdImage->GetLargestPossibleRegion();
+    
+    regionGrowingImage->SetRegions(region);
+    regionGrowingImage->Allocate();
+    
+    for(int i=0;i<seedPoints.size();i++){
+        
+      ImageType::IndexType seedPoint = seedPoints.at(i);
+      
+      typedef itk::ConnectedThresholdImageFilter<FloatImageType,FloatImageType> RegionGrowingType;
+      RegionGrowingType::Pointer regionGrowing = RegionGrowingType::New();
+      
+      regionGrowing->SetInput(thresholdImage);
+    
+      FloatImageType::SizeType imageSize;
+      imageSize = thresholdImage->GetLargestPossibleRegion().GetSize();
+    
+      seedPoint[1] = imageSize[1] - seedPoint[1]; 
+      
+      regionGrowing->SetSeed(seedPoint);
+      regionGrowing->SetReplaceValue(255);
+      regionGrowing->SetUpper(255);
+      regionGrowing->SetLower(255);
+      regionGrowing->Update();
+      
+      typedef itk::GrayscaleFillholeImageFilter<FloatImageType,FloatImageType> FillHolesType;
+      FillHolesType::Pointer fillHoles = FillHolesType::New();
+      fillHoles->SetInput(regionGrowing->GetOutput());
+      fillHoles->Update();
+      
+      typedef itk::MaximumImageFilter<FloatImageType> MaximumImageFilterType;
+      
+      MaximumImageFilterType::Pointer maximumImageFilter = MaximumImageFilterType::New ();
+      maximumImageFilter->SetInput(0, fillHoles->GetOutput());
+      maximumImageFilter->SetInput(1, regionGrowingImage);
+      maximumImageFilter->Update();
+    
+      regionGrowingImage = maximumImageFilter->GetOutput();    
+   
+    }
+    
+    this->vtkRegionGrowingImage = this->convertToVTKImage(regionGrowingImage);
 //    typedef itk::BinaryContourImageFilter <FloatImageType, FloatImageType >
 //                                                binaryContourImageFilterType;
 // 
@@ -231,7 +238,11 @@ void SkinImageSegmentation::computeRegionGrowing()
 //        itkContourImage->SetPixel(contourPixels.at(i),255);
 //    }
 //        
-//    this->vtkContourImage = this->convertToVTKImage(itkContourImage);  
+//    this->vtkContourImage = this->convertToVTKImage(itkContourImage);
+    
+    
+    
+    
 }
 
 typedef itk::Image<float, 2> FloatImageType;
@@ -288,9 +299,9 @@ void SkinImageSegmentation::setImage(vtkSmartPointer<vtkImageData> image)
     this->vtkImage = image;
 }
 
-void SkinImageSegmentation::setSeed(ImageType::IndexType seedPoint)
+void SkinImageSegmentation::setSeeds(std::vector<ImageType::IndexType> seedPoints)
 {
-	this->seedPoint = seedPoint;
+	this->seedPoints = seedPoints;
 }
 
 vtkSmartPointer<vtkImageData> SkinImageSegmentation::getSurfaceImage()

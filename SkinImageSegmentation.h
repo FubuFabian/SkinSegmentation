@@ -64,7 +64,7 @@ public:
         * \brief set the seed for the region growing algorithm 
         * [in] index of the pixel
         */
-    void setSeed(ImageType::IndexType seedPoint);
+    void setSeeds(std::vector<ImageType::IndexType>);
     
     /**
         * \brief returns the probability image 
@@ -114,7 +114,7 @@ private:
     
     std::vector<ImageType::IndexType> contourPixels; ///< the tumor contour pixels coordinates
     
-    ImageType::IndexType seedPoint; ///< the region growing seed point
+    std::vector<ImageType::IndexType> seedPoints; ///< the region growing seed point
     
     FloatImageType::Pointer surfaceImage; ///< the itk surface image
     

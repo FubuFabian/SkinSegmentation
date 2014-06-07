@@ -1,3 +1,5 @@
+#include <vector>
+
 #include "SkinImageSegmentationWidget.h"
 #include "ui_SkinImageSegmentationWidget.h"
 
@@ -25,6 +27,8 @@ SkinImageSegmentationWidget::SkinImageSegmentationWidget(QWidget *parent) :
     
     lowerThreshVal = 128;
     upperThreshVal = 255;
+    
+    numberOfSeeds = 0;
     
     this->seedPointFlag = false;
     this->surfaceImageFlag = false;
@@ -81,7 +85,6 @@ void SkinImageSegmentationWidget::threshold(bool on)
         ui->upperSlider->setEnabled(false);
     }
     
-       
 }
 
 void SkinImageSegmentationWidget::changeLowerThreshold(int tickValue)
@@ -129,9 +132,18 @@ void SkinImageSegmentationWidget::changeUpperThreshold(int tickValue)
         this->displayWidget->setAndDisplayImage(vtkThresholdImage);
 }
 
+void SkinImageSegmentationWidget::regionGrowing()
+{
+    this->skinImageSegmentation->setSeeds(seedPoints);
+    this->skinImageSegmentation->computeRegionGrowing();
+    
+    this->vtkRegionGrowingImage = skinImageSegmentation->getRegionGrowingImage();
+    this->displayWidget->setAndDisplayImage(vtkRegionGrowingImage);
+}
+
 void SkinImageSegmentationWidget::setImage(vtkSmartPointer<vtkImageData> image)
 {
-	skinImageSegmentation->setImage(image);
+    this->skinImageSegmentation->setImage(image);
 }
 
 void SkinImageSegmentationWidget::setMainWindow(MainWindow* mainWindow)
@@ -141,34 +153,36 @@ void SkinImageSegmentationWidget::setMainWindow(MainWindow* mainWindow)
 
 void SkinImageSegmentationWidget::getCoordinates()
 {
-//    std::cout<<std::endl;
-//    this->seedPoint[0] = mainWindow->getDisplayWidget()->getXPicked();
-//    this->seedPoint[1] = mainWindow->getDisplayWidget()->getYPicked();
-//    
-//    QString str;
-//
-//    ui->tableWidget->setItem(0, 0, new QTableWidgetItem(str.setNum(seedPoint[0])));
-//    ui->tableWidget->setItem(0, 1, new QTableWidgetItem(str.setNum(seedPoint[1])));
-//    std::cout << "Seed Point -> (x = " << seedPoint[0] << ", y = " << seedPoint[1] << ")" << std::endl;
-//    
-//    this->seedPointFlag = true;
-//    
-//    if(probabilityImageFlag)
-//        ui->segmentBtn->setEnabled(true);
+    
+    ImageType::IndexType seedPoint;
 
+    std::cout<<std::endl;
+    seedPoint[0] = mainWindow->getDisplayWidget()->getXPicked();
+    seedPoint[1] = mainWindow->getDisplayWidget()->getYPicked();
+    
+    QString str;
+    
+    ui->tableWidget->insertRow(numberOfSeeds);
+
+    ui->tableWidget->setItem(numberOfSeeds, 0, new QTableWidgetItem(str.setNum(seedPoint[0])));
+    ui->tableWidget->setItem(numberOfSeeds, 1, new QTableWidgetItem(str.setNum(seedPoint[1])));
+    std::cout << "Seed Point -> (x = " << seedPoint[0] << ", y = " << seedPoint[1] << ")" << std::endl;
+    
+    this->seedPoints.push_back(seedPoint);
+    
+    this->numberOfSeeds++;
+    this->seedPointFlag = true;
+    
 }
     
-void SkinImageSegmentationWidget::newSeed()
+void SkinImageSegmentationWidget::deleteSeed()
 {
-//    this->seedPoint[0] = 0;
-//    this->seedPoint[1] = 0;
-//
-//    this->displayWidget->setAndDisplayImage(vtkThresholdImage);
-//    
-//    ui->tableWidget->setItem(0, 0, new QTableWidgetItem(0));
-//    ui->tableWidget->setItem(0, 1, new QTableWidgetItem(0));
-//    
-//    ui->segmentBtn->setEnabled(false);
-//    ui->saveBtn->setEnabled(false);
-//    
+    int row = ui->tableWidget->currentRow();  
+    ui->tableWidget->removeRow(row);
+    
+    std::cout<<std::endl;    
+    seedPoints.erase(seedPoints.begin()+row);
+    
+    this->numberOfSeeds--;
+    
 }
