@@ -138,7 +138,10 @@ void SkinImageSegmentationWidget::regionGrowing()
     this->skinImageSegmentation->computeRegionGrowing();
     
     this->vtkRegionGrowingImage = skinImageSegmentation->getRegionGrowingImage();
-    this->displayWidget->setAndDisplayImage(vtkRegionGrowingImage);
+
+	this->vtkContourImage = skinImageSegmentation->getContourImage();
+
+    this->displayWidget->setAndDisplayImage(vtkContourImage);
 }
 
 void SkinImageSegmentationWidget::setImage(vtkSmartPointer<vtkImageData> image)

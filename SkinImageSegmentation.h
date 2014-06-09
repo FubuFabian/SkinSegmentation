@@ -112,7 +112,7 @@ private:
     
     vtkSmartPointer<vtkImageData> vtkContourImage; ///< the vtk tumor contour image
     
-    std::vector<ImageType::IndexType> contourPixels; ///< the tumor contour pixels coordinates
+    std::vector<FloatImageType::IndexType> contourPixels; ///< the tumor contour pixels coordinates
     
     std::vector<ImageType::IndexType> seedPoints; ///< the region growing seed point
     

@@ -3,6 +3,7 @@
 #include "itkVTKImageToImageFilter.h"
 #include "itkSurfaceEnhancementImageFilter.h"
 #include "itkSobelEdgeDetectionImageFilter5.h"
+#include "itkOuterContourFilter.h"
 
 #include <itkImageRegionIterator.h>
 #include <itkImageDuplicator.h>
@@ -39,65 +40,65 @@ void SkinImageSegmentation::computeSurfaceImage()
     
 /////////////////       SOBEL       ////////////////////////
     
-    typedef itk::SobelEdgeDetectionImageFilter5<FloatImageType, FloatImageType> SobelEdgeDetectionImageFilterType5;
-    SobelEdgeDetectionImageFilterType5::Pointer surfaceFilter = SobelEdgeDetectionImageFilterType5::New();
-    surfaceFilter->SetInput(anisotropicFilter->GetOutput());
-    surfaceFilter->Update();
+//    typedef itk::SobelEdgeDetectionImageFilter5<FloatImageType, FloatImageType> SobelEdgeDetectionImageFilterType5;
+//    SobelEdgeDetectionImageFilterType5::Pointer surfaceFilter = SobelEdgeDetectionImageFilterType5::New();
+//    surfaceFilter->SetInput(anisotropicFilter->GetOutput());
+//    surfaceFilter->Update();
     
 ///////////////////////////////////////////////////////////
     
 /////////////////       SATO        ////////////////////////
     
-//    typedef itk::SurfaceEnhancementImageFilter<FloatImageType, FloatImageType> SurfaceFilterType;
-//    SurfaceFilterType::Pointer surfaceFilter = SurfaceFilterType::New();
-//    
-//    surfaceFilter->SetInput(anisotropicFilter->GetOutput());
-//    surfaceFilter->SetMinScale(1);
-//    surfaceFilter->SetMaxScale(4);
-//    surfaceFilter->SetAlpha(1);
-//    surfaceFilter->SetGamma(0.1);
-//    surfaceFilter->SetScaleStep(1);
-//   
-//    surfaceFilter->Update();
+    //typedef itk::SurfaceEnhancementImageFilter<FloatImageType, FloatImageType> SurfaceFilterType;
+    //SurfaceFilterType::Pointer surfaceFilter = SurfaceFilterType::New();
+    //
+    //surfaceFilter->SetInput(anisotropicFilter->GetOutput());
+    //surfaceFilter->SetMinScale(1);
+    //surfaceFilter->SetMaxScale(5);
+    //surfaceFilter->SetAlpha(1);
+    //surfaceFilter->SetGamma(0.1);
+    //surfaceFilter->SetScaleStep(1);
+   
+    //surfaceFilter->Update();
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
 ////////////////        FRANGI      //////////////////////
     
-//    typedef itk::SymmetricSecondRankTensor<float,2> TensorPixelType;
-//
-//    // Image Types
-//    typedef itk::Image<TensorPixelType,2 > TensorImageType;
-//    
-//    typedef itk::HessianToObjectnessMeasureImageFilter<TensorImageType, FloatImageType > ObjectnessFilterType;
-//    ObjectnessFilterType::Pointer objectnessFilter = ObjectnessFilterType::New();
-//    
-//    float alpha = .01;
-//    float beta = 10;
-//    float gamma = 10;
-//
-//    objectnessFilter->SetScaleObjectnessMeasure(true);
-//    objectnessFilter->SetBrightObject(true);
-//    
-//    objectnessFilter->SetAlpha(alpha);
-//    objectnessFilter->SetBeta(beta);
-//    objectnessFilter->SetGamma(gamma);
-//    
-//    objectnessFilter->SetObjectDimension(1);
-//    //objectnessFilter->SetObjectDimension(1);
-//    //objectnessFilter->SetObjectDimension(0);
-//
-//
-//    typedef itk::MultiScaleHessianBasedMeasureImageFilter<FloatImageType, TensorImageType, FloatImageType > MultiScaleHessianFilterType;
-//    MultiScaleHessianFilterType::Pointer surfaceFilter = MultiScaleHessianFilterType::New();
-//
-//    surfaceFilter->SetInput(anisotropicFilter->GetOutput());
-//    surfaceFilter->SetHessianToMeasureFilter(objectnessFilter);
-//    surfaceFilter->SetSigmaStepMethodToEquispaced();
-//    surfaceFilter->SetSigmaMinimum(1);
-//    surfaceFilter->SetSigmaMaximum(3);
-//    surfaceFilter->SetNumberOfSigmaSteps(3);
-//    surfaceFilter->Update();   
+    typedef itk::SymmetricSecondRankTensor<float,2> TensorPixelType;
+
+    // Image Types
+    typedef itk::Image<TensorPixelType,2 > TensorImageType;
+    
+    typedef itk::HessianToObjectnessMeasureImageFilter<TensorImageType, FloatImageType > ObjectnessFilterType;
+    ObjectnessFilterType::Pointer objectnessFilter = ObjectnessFilterType::New();
+    
+    float alpha = .01;
+    float beta = 10;
+    float gamma = 10;
+
+    objectnessFilter->SetScaleObjectnessMeasure(true);
+    objectnessFilter->SetBrightObject(true);
+    
+    objectnessFilter->SetAlpha(alpha);
+    objectnessFilter->SetBeta(beta);
+    objectnessFilter->SetGamma(gamma);
+    
+    objectnessFilter->SetObjectDimension(1);
+    //objectnessFilter->SetObjectDimension(1);
+    //objectnessFilter->SetObjectDimension(0);
+
+
+    typedef itk::MultiScaleHessianBasedMeasureImageFilter<FloatImageType, TensorImageType, FloatImageType > MultiScaleHessianFilterType;
+    MultiScaleHessianFilterType::Pointer surfaceFilter = MultiScaleHessianFilterType::New();
+
+    surfaceFilter->SetInput(anisotropicFilter->GetOutput());
+    surfaceFilter->SetHessianToMeasureFilter(objectnessFilter);
+    surfaceFilter->SetSigmaStepMethodToEquispaced();
+    surfaceFilter->SetSigmaMinimum(1);
+    surfaceFilter->SetSigmaMaximum(3);
+    surfaceFilter->SetNumberOfSigmaSteps(3);
+    surfaceFilter->Update();   
     
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -140,7 +141,6 @@ void SkinImageSegmentation::computeThresholdImage(float lowerThreshold, float up
     this->thresholdOverlayImage = maximumImageFilter->GetOutput();
     
     this->vtkThresholdOverlayImage = this->convertToVTKImage(thresholdOverlayImage);
-    
 }
 
 void SkinImageSegmentation::computeRegionGrowing()
@@ -194,55 +194,35 @@ void SkinImageSegmentation::computeRegionGrowing()
     }
     
     this->vtkRegionGrowingImage = this->convertToVTKImage(regionGrowingImage);
-//    typedef itk::BinaryContourImageFilter <FloatImageType, FloatImageType >
-//                                                binaryContourImageFilterType;
-// 
-//    binaryContourImageFilterType::Pointer binaryContourFilter
-//                                        = binaryContourImageFilterType::New ();
-//    binaryContourFilter->SetInput(fillHoles->GetOutput());
-//    binaryContourFilter->SetForegroundValue(255);
-//    binaryContourFilter->SetBackgroundValue(0);
-//    binaryContourFilter->SetFullyConnected(false);
-//    binaryContourFilter->Update();
-//    
-//    
-//    FloatImageType::Pointer contourImage = binaryContourFilter->GetOutput();
-//    
-//    typedef itk::ImageRegionIterator<FloatImageType>  FloatImageRegionIteratorType;
-//    
-//    FloatImageRegionIteratorType itContour(contourImage, 
-//          contourImage->GetLargestPossibleRegion());
-//    itContour.GoToBegin();
-//    
-//    ImageType::IndexType pixel;
-//    
-//    while(!itContour.IsAtEnd())
-//    {
-//        if(itContour.Value()!=0){
-//            pixel[0] = itContour.GetIndex()[0];
-//            pixel[1] = itContour.GetIndex()[1];
-//            
-//            this->contourPixels.push_back(pixel);
-//        }
-//        ++itContour;
-//    }
-//    
-//    typedef itk::ImageDuplicator<FloatImageType> DuplicatorType;
-//    DuplicatorType::Pointer duplicator = DuplicatorType::New();
-//    duplicator->SetInputImage(this->itkImage);
-//    duplicator->Update();
-//    
-//    FloatImageType::Pointer itkContourImage = duplicator->GetOutput();
-//    
-//    for(unsigned int i=0;i<contourPixels.size();i++){
-//        itkContourImage->SetPixel(contourPixels.at(i),255);
-//    }
-//        
-//    this->vtkContourImage = this->convertToVTKImage(itkContourImage);
+
+	typedef itk::OuterContourFilter<FloatImageType,FloatImageType> OuterContourType;
+	OuterContourType::Pointer outerContourFilter = OuterContourType::New();
+
+	outerContourFilter->SetInput(regionGrowingImage);
+	outerContourFilter->SetDirection(1);
+	outerContourFilter->Update();
+
+	FloatImageType::Pointer contourImage = outerContourFilter->GetOutput();
+	this->vtkContourImage = this->convertToVTKImage(contourImage);
     
+    typedef itk::ImageRegionIterator<FloatImageType>  FloatImageRegionIteratorType;
     
+    FloatImageRegionIteratorType itContour(contourImage, 
+          contourImage->GetLargestPossibleRegion());
+    itContour.GoToBegin();
     
+    ImageType::IndexType pixel;
     
+    while(!itContour.IsAtEnd())
+    {
+        if(itContour.Value()!=0){
+            pixel[0] = itContour.GetIndex()[0];
+            pixel[1] = itContour.GetIndex()[1];
+            
+            this->contourPixels.push_back(pixel);
+        }
+        ++itContour;
+    }   
 }
 
 typedef itk::Image<float, 2> FloatImageType;

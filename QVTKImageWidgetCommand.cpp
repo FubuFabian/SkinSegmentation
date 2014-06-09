@@ -92,8 +92,8 @@ void QVTKImageWidgetCommand<Widget>::Execute(vtkObject* caller, unsigned long ev
       int* dimension = imageData->GetDimensions();   
       
       int center[2];
-      center[0] = floor(dimension[0]/2);
-      center[1] = floor(dimension[1]/2);
+      center[0] = floor((float)dimension[0]/2);
+      center[1] = floor((float)dimension[1]/2);
       
       if(qVTKVolumeSliceWidgetFlag){
           xImagePosition = (xImagePosition - extent[0] + center[0]);

@@ -7,6 +7,7 @@
 #include <time.h>
 #include <map>
 #include <float.h>
+#include <algorithm>
 
 #include <QString>
 #include <QFileDialog>
