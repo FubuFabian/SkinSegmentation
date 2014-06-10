@@ -10,6 +10,7 @@
 #include <vtkEventQtSlotConnect.h>
 
 class VolumeSegmentationWidget;
+class SkinVolumeSegmentationWidget;
 class Scene3DWidget;
 
 namespace Ui {
@@ -64,6 +65,12 @@ public:
      * @param volumeSegmentation
      */
     void connectWithVolumeSegmentation(VolumeSegmentationWidget* volumeSegmentation);
+    
+    /**
+     * Connects the widget with a SkinVolumeSegmentationWudget.h
+     * @param volumeSegmentation
+     */
+    void connectWithSkinVolumeSegmentation(SkinVolumeSegmentationWidget* skinVolumeSegmentation);
     
     void connectWithScene3D(Scene3DWidget* scene3DWidget);
     

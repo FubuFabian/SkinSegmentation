@@ -29,78 +29,89 @@ OuterContourFilter<TInputImage, TMaskImage, TOutputImage>
 ::GenerateData()
 {
   this->AllocateOutputs();
-
+  
   ProgressReporter progress( this, 0, 
         this->GetInput()->GetRequestedRegion().GetNumberOfPixels(), 100 );
   
-  ImageType::SizeType imageSize;
+  typename InputImageType::SizeType imageSize;
   imageSize = this->GetInput()->GetLargestPossibleRegion().GetSize();
-  
+
   if(::itk::GetImageDimension<InputImageType>::ImageDimension == 2)
 	imageSize[2] = 1;
-	
+  
   bool firstFlag;
   firstFlag = false;
   
   bool lastFlag;
   lastFlag = false;
   
-  std::vector<InputImageType::IndexType> contourPixels;
+  std::vector<typename OutputImageType::IndexType> contourPixels;
 
   switch(m_Direction){
   
   case 2:
-  
+      
 	for(int x=0;x<imageSize[0];x++){
 		for(int y=0;y<imageSize[1];y++){
 			for(int z=0;z<imageSize[2];z++){
 		
-				InputImageType::IndexType pixelIndex;
+				typename InputImageType::IndexType pixelIndex;
 				pixelIndex[0] = x;
 				pixelIndex[1] = y;
-				pixelIndex[2] = z;
+                                
+                                if(::itk::GetImageDimension<InputImageType>::ImageDimension == 3)
+                                        pixelIndex[2] = z;
 				
-				InputImageType::IndexType finalIndex;
+				typename OutputImageType::IndexType firstIndex;
+				typename OutputImageType::IndexType finalIndex;
 				
 				float pixelValue = this->GetInput()->GetPixel(pixelIndex);
 				
 				if((pixelValue==m_ContourValue)&&(firstFlag==false)){
-					contourPixels.push_back(pixelIndex);
+					firstIndex = pixelIndex;
+					contourPixels.push_back(firstIndex);
 					firstFlag = true;				
-				}else if((pixelValue == m_ContourValue)&&(firstFlag == true)){
+				}else if((pixelValue == m_ContourValue)&&(firstFlag==true)){
 					finalIndex = pixelIndex;
 					lastFlag = true;
 				}
 				
 				if((z==imageSize[2]-1)&&(lastFlag==true)){
-					contourPixels.push_back(finalIndex);
-					firstFlag = false;
-					lastFlag = false;	
+					contourPixels.push_back(finalIndex);	
 				}	
 			}
-		} 
+                        
+		  firstFlag = false;
+		  lastFlag = false;
+                
+                } 
 	  }
+        
 	  break;
 	
 	case 1:
-	
+
 	  for(int x=0;x<imageSize[0];x++){
 		for(int z=0;z<imageSize[2];z++){
 			for(int y=0;y<imageSize[1];y++){
 		
-				InputImageType::IndexType pixelIndex;
+				typename InputImageType::IndexType pixelIndex;
 				pixelIndex[0] = x;
 				pixelIndex[1] = y;
-				pixelIndex[2] = z;
+                                
+				if(::itk::GetImageDimension<InputImageType>::ImageDimension == 3)
+                                        pixelIndex[2] = z;
 				
-				InputImageType::IndexType finalIndex;
+				typename OutputImageType::IndexType firstIndex;
+				typename OutputImageType::IndexType finalIndex;
 				
 				float pixelValue = this->GetInput()->GetPixel(pixelIndex);
 				
 				if((pixelValue==m_ContourValue)&&(firstFlag==false)){
-					contourPixels.push_back(pixelIndex);
+					firstIndex = pixelIndex;
+					contourPixels.push_back(firstIndex);
 					firstFlag = true;				
-				}else if((pixelValue == m_ContourValue)&&(firstFlag == true)){
+				}else if((pixelValue == m_ContourValue)&&(firstFlag==true)){
 					finalIndex = pixelIndex;
 					lastFlag = true;
 				}
@@ -111,64 +122,76 @@ OuterContourFilter<TInputImage, TMaskImage, TOutputImage>
 					lastFlag = false;	
 				}	
 			}
-		} 
-      }	
-	  
+                        
+		  firstFlag = false;
+		  lastFlag = false;
+                
+                } 
+          }	
+
 	  break;
 	  
 	case 0:
-	
-	  for(int y=0;y<imageSize[1];y++){
-		for(int z=0;z<imageSize[2];z++){
+
+	  for(int z=0;z<imageSize[2];z++){
+                for(int y=0;y<imageSize[1];y++){
 			for(int x=0;x<imageSize[0];x++){
 		
-				InputImageType::IndexType pixelIndex;
+				typename InputImageType::IndexType pixelIndex;
 				pixelIndex[0] = x;
 				pixelIndex[1] = y;
-				pixelIndex[2] = z;
-				
-				InputImageType::IndexType finalIndex;
+                                
+				if(::itk::GetImageDimension<InputImageType>::ImageDimension == 3)
+                                        pixelIndex[2] = z;
+                                
+                                typename OutputImageType::IndexType firstIndex;
+				typename OutputImageType::IndexType finalIndex;
 				
 				float pixelValue = this->GetInput()->GetPixel(pixelIndex);
 				
 				if((pixelValue==m_ContourValue)&&(firstFlag==false)){
-					contourPixels.push_back(pixelIndex);
+                                        firstIndex = pixelIndex;
+					contourPixels.push_back(firstIndex);
 					firstFlag = true;				
-				}else if((pixelValue == m_ContourValue)&&(firstFlag == true)){
+				}else if((pixelValue == m_ContourValue)&&(firstFlag==true)){
 					finalIndex = pixelIndex;
 					lastFlag = true;
 				}
 				
 				if((x==imageSize[0]-1)&&(lastFlag==true)){
-					contourPixels.push_back(finalIndex);
-					firstFlag = false;
-					lastFlag = false;	
+					contourPixels.push_back(finalIndex);	
 				}	
 			}
-		} 
+                        
+                  firstFlag = false;
+		  lastFlag = false;
+		
+                } 
 	  }
-	  
+
 	  break;
 	
 	}
 
 	std::cout<<"Contours Finished"<<std::endl;
-	
-	typedef ImageRegionConstIterator<InputImageType>  ImageRegionIteratorType;
+        std::cout<<"Number of contour pixels: "<<contourPixels.size()<<std::endl;
+
+	typedef ImageRegionConstIterator<OutputImageType>  ImageRegionIteratorType;
 	
 	ImageRegionIteratorType itOut(this->GetOutput(),this->GetOutput()->GetLargestPossibleRegion());
-    itOut.GoToBegin();
-    
-    while(!itOut.IsAtEnd())
-    {
-      this->GetOutput()->SetPixel(itOut.GetIndex(),0);
-      ++itOut;
-      progress.CompletedPixel();
-    }      
+        itOut.GoToBegin();
+
+        while(!itOut.IsAtEnd())
+        {
+          this->GetOutput()->SetPixel(itOut.GetIndex(),0);
+          ++itOut;
+          progress.CompletedPixel();
+        }      
 
 	for(int i=0;i<contourPixels.size();i++){
 		this->GetOutput()->SetPixel(contourPixels.at(i),255);   
 	}
+
   
 }
 

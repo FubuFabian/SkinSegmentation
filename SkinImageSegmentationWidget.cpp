@@ -15,15 +15,17 @@ SkinImageSegmentationWidget::SkinImageSegmentationWidget(QWidget *parent) :
     ui->upperSlider->setEnabled(false);
     
     ui->lowerSlider->setTickInterval(1);
-    ui->lowerSlider->setRange(0,255);
-    ui->lowerSlider->setValue(128);
+    ui->lowerSlider->setRange(0,15);
+    ui->lowerSlider->setValue(0);
 	
     ui->upperSlider->setTickInterval(1);
     ui->upperSlider->setRange(0,255);
     ui->upperSlider->setValue(255);
     
-    ui->lowerThreshold_2->setText("128");
-    ui->upperThreshold_2->setText("255");
+    ui->lowerThreshold_2->setText("0");
+    ui->upperThreshold_2->setText("15");
+    
+    ui->sigmaSize->setText("10");
     
     lowerThreshVal = 128;
     upperThreshVal = 255;
@@ -49,7 +51,7 @@ SkinImageSegmentationWidget::~SkinImageSegmentationWidget()
 
 void SkinImageSegmentationWidget::surfaceEnhancement()
 {
-    this->skinImageSegmentation->computeSurfaceImage();
+    this->skinImageSegmentation->computeSurfaceImage(ui->sigmaSize->text().toInt());
 
     this->vtkSurfaceImage = skinImageSegmentation->getSurfaceImage();
     
@@ -139,9 +141,17 @@ void SkinImageSegmentationWidget::regionGrowing()
     
     this->vtkRegionGrowingImage = skinImageSegmentation->getRegionGrowingImage();
 
-	this->vtkContourImage = skinImageSegmentation->getContourImage();
+    this->vtkContourImage = skinImageSegmentation->getContourImage();
 
+    this->displayWidget->setAndDisplayImage(vtkRegionGrowingImage);
+}
+
+void SkinImageSegmentationWidget::outerContour()
+{   
+    this->skinImageSegmentation->computeOuterContour();
+    this->vtkContourImage = skinImageSegmentation->getContourImage();
     this->displayWidget->setAndDisplayImage(vtkContourImage);
+    
 }
 
 void SkinImageSegmentationWidget::setImage(vtkSmartPointer<vtkImageData> image)

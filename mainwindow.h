@@ -146,6 +146,11 @@ private slots:
    * Segment Skin 2D Ultrasound Image
    */
   void segmentSkinImage();
+  
+  /**
+   * Segment Skin 3D Ultrasound Image
+   */
+  void segmentSkinVolume();
 };
 
 

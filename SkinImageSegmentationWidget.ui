@@ -24,6 +24,23 @@
       </widget>
      </item>
      <item>
+      <widget class="QLineEdit" name="sigmaSize">
+       <property name="maximumSize">
+        <size>
+         <width>51</width>
+         <height>22</height>
+        </size>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLabel" name="label">
+       <property name="text">
+        <string>Sigma Size</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <spacer name="horizontalSpacer_2">
        <property name="orientation">
         <enum>Qt::Horizontal</enum>
@@ -125,9 +142,16 @@
         </widget>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="regionGrowingBtn">
          <property name="text">
           <string>Region Growing</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="contourBtn">
+         <property name="text">
+          <string>Contour</string>
          </property>
         </widget>
        </item>
@@ -221,18 +245,34 @@
    </hints>
   </connection>
   <connection>
-   <sender>pushButton</sender>
+   <sender>regionGrowingBtn</sender>
    <signal>clicked()</signal>
    <receiver>SkinImageSegmentationWidget</receiver>
    <slot>regionGrowing()</slot>
    <hints>
     <hint type="sourcelabel">
-     <x>344</x>
-     <y>270</y>
+     <x>409</x>
+     <y>256</y>
     </hint>
     <hint type="destinationlabel">
      <x>418</x>
      <y>281</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>contourBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>SkinImageSegmentationWidget</receiver>
+   <slot>outerContour()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>333</x>
+     <y>285</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>263</x>
+     <y>325</y>
     </hint>
    </hints>
   </connection>
@@ -244,5 +284,6 @@
   <slot>changeUpperThreshold(int)</slot>
   <slot>deleteSeed()</slot>
   <slot>regionGrowing()</slot>
+  <slot>outerContour()</slot>
  </slots>
 </ui>

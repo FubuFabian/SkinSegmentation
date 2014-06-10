@@ -132,6 +132,7 @@
       <string>Skin Segmentation</string>
      </property>
      <addaction name="actionSegment_Image_2"/>
+     <addaction name="actionSegment_Volume_2"/>
     </widget>
     <addaction name="actionCrop_Images"/>
     <addaction name="menuUS_Probe_Calibration"/>
@@ -216,6 +217,11 @@
   <action name="actionSegment_Image_2">
    <property name="text">
     <string>Segment Image</string>
+   </property>
+  </action>
+  <action name="actionSegment_Volume_2">
+   <property name="text">
+    <string>Segment Volume</string>
    </property>
   </action>
  </widget>
@@ -462,6 +468,22 @@
     </hint>
    </hints>
   </connection>
+  <connection>
+   <sender>actionSegment_Volume_2</sender>
+   <signal>triggered()</signal>
+   <receiver>MainWindow</receiver>
+   <slot>segmentSkinVolume()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>-1</x>
+     <y>-1</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>330</x>
+     <y>329</y>
+    </hint>
+   </hints>
+  </connection>
  </connections>
  <slots>
   <slot>addImages()</slot>
@@ -480,5 +502,6 @@
   <slot>segmentImage()</slot>
   <slot>segmentVolume()</slot>
   <slot>segmentSkinImage()</slot>
+  <slot>segmentSkinVolume()</slot>
  </slots>
 </ui>

@@ -47,7 +47,7 @@ public:
     /**
      * \brief compute the surface image 1 highest probablity
      */
-    void computeSurfaceImage();
+    void computeSurfaceImage(int);
     
     /**
      * \brief compute the threshold image 1 highest probablity
@@ -59,6 +59,12 @@ public:
         * to obtain the tumor region 
         */
     void computeRegionGrowing();
+    
+    /**
+        * \brief computes the outer contour algortithm on the probability image
+        * to obtain the tumor region 
+        */
+    void computeOuterContour();
     
     /**
         * \brief set the seed for the region growing algorithm 
@@ -112,6 +118,8 @@ private:
     
     vtkSmartPointer<vtkImageData> vtkContourImage; ///< the vtk tumor contour image
     
+    vtkSmartPointer<vtkImageData> vtkContourOverlayImage; ///< the vtk region growing image
+    
     std::vector<FloatImageType::IndexType> contourPixels; ///< the tumor contour pixels coordinates
     
     std::vector<ImageType::IndexType> seedPoints; ///< the region growing seed point
@@ -120,7 +128,9 @@ private:
     
     FloatImageType::Pointer thresholdImage; ///< the itk threshold image
     
-    FloatImageType::Pointer thresholdOverlayImage; ///< the itk threshold overlay image
+    FloatImageType::Pointer regionGrowingImage; ///< the itk regionGrowing image
+    
+    FloatImageType::Pointer contourImage;
     
     FloatImageType::Pointer segmentedImage;
     

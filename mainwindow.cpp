@@ -10,6 +10,7 @@
 #include "ImageSegmentationWidget.h"
 #include "SkinImageSegmentationWidget.h"
 #include "VolumeSegmentationWidget.h"
+#include "SkinVolumeSegmentationWidget.h"
 #include "VTKThreeViews.h"
 
 #include <QVBoxLayout>
@@ -376,6 +377,45 @@ void MainWindow::segmentVolume()
         
         volumeSegmentationWidget->setMainWindow(this);
         volumeSegmentationWidget->show();
+        
+        
+//        displayWidget->setPickerFlag();
+//        imageSegmentationWidget->setImage(displayWidget->getImageViewer()->GetInput());
+//        
+//        Connections->Connect(displayWidget->getQVTKWidget()->GetRenderWindow()->GetInteractor(),
+//                           vtkCommand::LeftButtonPressEvent,
+//                           imageSegmentationWidget,
+//                           SLOT(getCoordinates()));
+//        
+//        imageSegmentationWidget->setMainWindow(this);
+//        imageSegmentationWidget->show();
+    }else
+    {
+      QErrorMessage errorMessage;
+      errorMessage.showMessage(
+		  "No images loaded, </ br> please load a image before segmentation");
+      errorMessage.exec();
+    }
+
+}
+
+void MainWindow::segmentSkinVolume()
+{
+    std::cout<<"Segmentation for 2D images"<<std::endl<<std::endl;
+    
+    
+    if(displayWidget->getVolumeLoaded())
+    {
+        SkinVolumeSegmentationWidget * skinVolumeSegmentationWidget = new SkinVolumeSegmentationWidget();
+        
+        skinVolumeSegmentationWidget->setVolume(displayWidget->getVolume());
+        VTKThreeViews* threeViews = displayWidget->getVTKThreeViews();
+        
+        threeViews->connectWithSkinVolumeSegmentation(skinVolumeSegmentationWidget);
+        skinVolumeSegmentationWidget->setVTKThreeViews(threeViews);
+        
+        skinVolumeSegmentationWidget->setMainWindow(this);
+        skinVolumeSegmentationWidget->show();
         
         
 //        displayWidget->setPickerFlag();

@@ -71,7 +71,8 @@ SET(AppSrcs main.cpp mainwindow.cpp QVTKImageWidget.cpp QVTKImageWidgetCommand.c
     SegmentationIntensityAndTextureImages.cpp ImageSegmentation.cpp
     ImageSegmentationWidget.cpp VolumeSegmentation.cpp
     VolumeSegmentationWidget.cpp VolumeReconstructionPBM.cpp VolumeReconstruction.cpp
-    SkinImageSegmentation.cpp SkinImageSegmentationWidget.cpp)
+    SkinImageSegmentation.cpp SkinImageSegmentationWidget.cpp SkinVolumeSegmentation.cpp 
+    SkinVolumeSegmentationWidget.cpp)
     
 SET(AppHeaders mainwindow.h QVTKImageWidget.h QVTKImageWidgetCommand.h 
     ProbeCalibrationWidget.h Calibration.h VolumeReconstructionWidget.h
@@ -91,14 +92,15 @@ SET(AppHeaders mainwindow.h QVTKImageWidget.h QVTKImageWidgetCommand.h
     itkImageToVTKImageFilter.h itkVTKImageToImageFilter.h ImageSegmentation.h
     ImageSegmentationWidget.h VolumeSegmentation.h VolumeSegmentationWidget.h
     VolumeReconstructionPBM.h VolumeReconstruction.h SkinImageSegmentation.h
-    SkinImageSegmentationWidget.h itkSurfaceEnhancementImageFilter.h
+    SkinImageSegmentationWidget.h SkinVolumeSegmentation.h
+    SkinVolumeSegmentationWidget.h itkSurfaceEnhancementImageFilter.h
     itkSobelOperator5.h itkSobelEdgeDetectionImageFilter5.h itkOuterContourFilter.h)
     
 SET(AppUI mainwindow.ui ProbeCalibrationWidget.ui VolumeReconstructionWidget.ui 
     CropImagesWidget.ui Scene3DWidget.ui CheckCalibrationErrorWidget.ui
     VTKThreeViews.ui ChangeVolumePropertiesWidget.ui PolarisConfigurationWidget.ui
     SegmentationTrainingWidget.ui ImageSegmentationWidget.ui VolumeSegmentationWidget.ui
-    SkinImageSegmentationWidget.ui)
+    SkinImageSegmentationWidget.ui SkinVolumeSegmentationWidget.ui)
 
 SET(AppUIFLTK PivotCalibrationUI.fl)
 

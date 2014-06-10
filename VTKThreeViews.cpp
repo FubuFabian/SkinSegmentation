@@ -1,6 +1,7 @@
 #include "VTKThreeViews.h"
 #include "ui_VTKThreeViews.h"
 #include "VolumeSegmentationWidget.h"
+#include "SkinVolumeSegmentationWidget.h"
 #include "Scene3DWidget.h"
 
 #include <QVBoxLayout>
@@ -190,6 +191,32 @@ void VTKThreeViews::connectWithVolumeSegmentation(VolumeSegmentationWidget* volu
     coronalConnections->Connect(coronalDisplayWidget->getQVTKWidget()->GetRenderWindow()->GetInteractor(),
                            vtkCommand::LeftButtonPressEvent,
                            volumeSegmentation,
+                           SLOT(getCoordinates()));
+        
+}
+
+void VTKThreeViews::connectWithSkinVolumeSegmentation(SkinVolumeSegmentationWidget* skinVolumeSegmentation)
+{
+    
+    axialConnections = vtkSmartPointer<vtkEventQtSlotConnect>::New();
+    
+    axialConnections->Connect(axialDisplayWidget->getQVTKWidget()->GetRenderWindow()->GetInteractor(),
+                           vtkCommand::LeftButtonPressEvent,
+                           skinVolumeSegmentation,
+                           SLOT(getCoordinates()));
+    
+    sagittalConnections = vtkSmartPointer<vtkEventQtSlotConnect>::New();
+    
+    sagittalConnections->Connect(sagittalDisplayWidget->getQVTKWidget()->GetRenderWindow()->GetInteractor(),
+                           vtkCommand::LeftButtonPressEvent,
+                           skinVolumeSegmentation,
+                           SLOT(getCoordinates()));
+    
+    coronalConnections = vtkSmartPointer<vtkEventQtSlotConnect>::New();
+    
+    coronalConnections->Connect(coronalDisplayWidget->getQVTKWidget()->GetRenderWindow()->GetInteractor(),
+                           vtkCommand::LeftButtonPressEvent,
+                           skinVolumeSegmentation,
                            SLOT(getCoordinates()));
         
 }

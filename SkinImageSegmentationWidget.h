@@ -78,6 +78,8 @@ private slots:
     
     void regionGrowing();
     
+    void outerContour();
+    
     /**
      * \brief choose a new seed point
      */
