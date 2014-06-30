@@ -307,6 +307,8 @@ public:
      * @return 
      */
     bool getVolumeLoaded();
+    
+    int getSlice();
 
 private:    
 

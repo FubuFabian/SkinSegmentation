@@ -247,6 +247,7 @@ void ImageSegmentationWidget::getCoordinates()
 
     ui->tableWidget->setItem(0, 0, new QTableWidgetItem(str.setNum(seedPoint[0])));
     ui->tableWidget->setItem(0, 1, new QTableWidgetItem(str.setNum(seedPoint[1])));
+    ui->tableWidget->setItem(0, 2, new QTableWidgetItem(str.setNum(vtkProbabilityImage->GetScalarComponentAsDouble(seedPoint[0],seedPoint[1],0,0))));
     std::cout << "Seed Point -> (x = " << seedPoint[0] << ", y = " << seedPoint[1] << ")" << std::endl;
     
     this->seedPointFlag = true;
@@ -265,6 +266,7 @@ void ImageSegmentationWidget::newSeed()
     
     ui->tableWidget->setItem(0, 0, new QTableWidgetItem(0));
     ui->tableWidget->setItem(0, 1, new QTableWidgetItem(0));
+    ui->tableWidget->setItem(0, 2, new QTableWidgetItem(0));
     
     ui->segmentBtn->setEnabled(false);
     ui->saveBtn->setEnabled(false);

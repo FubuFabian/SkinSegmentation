@@ -27,12 +27,12 @@
 
 void SkinVolumeSegmentation::computeSurfaceVolume(int sigmaSize)
 {
-
+    
     itkVolume = this->convertToITKImage(vtkVolume);
 
     typedef itk::GradientAnisotropicDiffusionImageFilter<FloatImageType,FloatImageType> AnisotropicFilterType;
 
-    float timeStep = 0.125;
+    float timeStep = 0.0625;
 
     AnisotropicFilterType::Pointer anisotropicFilter = AnisotropicFilterType::New();
     anisotropicFilter->SetInput(itkVolume);
@@ -189,7 +189,7 @@ void SkinVolumeSegmentation::computeRegionGrowing()
       FloatImageType::SizeType volumeSize;
       volumeSize = thresholdVolume->GetLargestPossibleRegion().GetSize();
 
-      seedPoint[1] = volumeSize[1] - seedPoint[1];
+      std::cout<<"Seed: "<<seedPoint[0]<<","<<seedPoint[1]<<","<<seedPoint[2]<<","<<thresholdVolume->GetPixel(seedPoint)<<std::endl;
 
       regionGrowing->SetSeed(seedPoint);
       regionGrowing->SetReplaceValue(255);
@@ -233,12 +233,18 @@ void SkinVolumeSegmentation::computeOuterContour()
     outerContourFilter->Update();
 
     FloatImageType::Pointer contourVolumeY = outerContourFilter->GetOutput();
+    
+    outerContourFilter->SetDirection(2);
+    outerContourFilter->Update();
+
+    FloatImageType::Pointer contourVolumeZ = outerContourFilter->GetOutput();
 
     typedef itk::MaximumImageFilter<FloatImageType> MaximumImageFilterType;
 
     MaximumImageFilterType::Pointer maximumVolumeFilter = MaximumImageFilterType::New ();
     maximumVolumeFilter->SetInput(0, contourVolumeY);
     maximumVolumeFilter->SetInput(1, contourVolumeX);
+    maximumVolumeFilter->SetInput(2, contourVolumeZ);
     maximumVolumeFilter->Update();
 
     this->contourVolume = maximumVolumeFilter->GetOutput();

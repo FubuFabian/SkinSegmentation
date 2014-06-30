@@ -104,7 +104,7 @@ void VolumeSegmentation::computeRegionGrowing()
     FloatVolumeType::SizeType volumeSize;
     volumeSize = probabilityVolume->GetLargestPossibleRegion().GetSize();
     
-    seedPoint[1] = volumeSize[1] - seedPoint[1]; 
+    std::cout<<"Seed: "<<seedPoint[0]<<","<<seedPoint[1]<<","<<seedPoint[2]<<","<<probabilityVolume->GetPixel(seedPoint)<<std::endl;
     
     regionGrowing->SetSeed(seedPoint);
     regionGrowing->SetReplaceValue(255);

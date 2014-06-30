@@ -103,7 +103,7 @@ void ImageSegmentation::computeRegionGrowing()
     FloatImageType::SizeType imageSize;
     imageSize = probabilityImage->GetLargestPossibleRegion().GetSize();
     
-    seedPoint[1] = imageSize[1] - seedPoint[1]; 
+    std::cout<<"Seed: "<<seedPoint[0]<<","<<seedPoint[1]<<","<<probabilityImage->GetPixel(seedPoint)<<std::endl;
     
     regionGrowing->SetSeed(seedPoint);
     regionGrowing->SetReplaceValue(255);

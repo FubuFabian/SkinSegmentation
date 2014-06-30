@@ -26,9 +26,9 @@ const double QVTKVolumeSliceWidget::axialElements[16] = {
 
 const double QVTKVolumeSliceWidget::sagittalElements[16] = {
     
-0, 0,-1, 0,
+0, 0, 1, 0,
 1, 0, 0, 0,
-0,-1, 0, 0,
+0, 1, 0, 0,
 0, 0, 0, 1    
             
 };
@@ -37,7 +37,7 @@ const double QVTKVolumeSliceWidget::coronalElements[16] = {
     
 1, 0, 0, 0,
 0, 0, 1, 0,
-0,-1, 0, 0,
+0, 1, 0, 0,
 0, 0, 0, 1
         
 };
@@ -98,18 +98,17 @@ void QVTKVolumeSliceWidget::displayVolumeSlice(int slice)
         this->slice = slice;
         
 	if(axialView){
-		position[0] = origin[0] + spacing[0] * 0.5 * (dimensions[0]);		
-		position[1] = origin[1] + spacing[1] * 0.5 * (dimensions[1]);	
-                position[2] = origin[2] + spacing[2] * slice;
+		position[0] = origin[0]; //+ spacing[0] * 0.5 * (dimensions[0]);		
+		position[1] = origin[1]; //+ spacing[1] * 0.5 * (dimensions[1]);	
+                position[2] = origin[2] + spacing[2] * slice;   
 	}else if(sagittalView){
 		position[0] = origin[0] + spacing[0] * slice;
-                position[1] = origin[1] + spacing[1] * 0.5 * (dimensions[1]);
-                position[2] = origin[2] + spacing[2] * 0.5 * (dimensions[2]);
-	}else if(coronalView){
-
-                position[0] = origin[0] + spacing[0] * 0.5 * (dimensions[0]);
+                position[1] = origin[1]; //+ spacing[1] * 0.5 * (dimensions[1]);
+                position[2] = origin[2]; //+ spacing[2] * 0.5 * (dimensions[2]);               
+	}else if(coronalView){   
+                position[0] = origin[0]; //+ spacing[0] * 0.5 * (dimensions[0]);
 		position[1] = origin[1] + spacing[1] * slice;
-                position[2] = origin[2] + spacing[2] * 0.5 * (dimensions[2]);
+                position[2] = origin[2]; //+ spacing[2] * 0.5 * (dimensions[2]);
 	}	
 	
 	resliceAxes->SetElement(0, 3, position[0]);
@@ -123,6 +122,8 @@ void QVTKVolumeSliceWidget::displayVolumeSlice(int slice)
         
         vtkSmartPointer<vtkImageData> sliceImage = reslicer->GetOutput();
         
+        //sliceImage = this->imageVerticalFlip(sliceImage);
+        
         if(horizontalFlipFlag)
             sliceImage = this->imageHorizontalFlip(sliceImage);
         
@@ -130,7 +131,7 @@ void QVTKVolumeSliceWidget::displayVolumeSlice(int slice)
             sliceImage = this->imageVerticalFlip(sliceImage);
                     
 	viewer->SetInput(sliceImage);
-        viewer->GetRenderer()->ResetCamera();
+        //viewer->GetRenderer()->ResetCamera();
 
         qvtkWidget->SetRenderWindow(viewer->GetRenderWindow());
 
@@ -258,9 +259,9 @@ void QVTKVolumeSliceWidget::setPickedCoordinates(int xPosition, int yPosition)
             this->yPicked = xPosition;
         
         if(verticalFlipFlag)
-            this->zPicked = yPosition;
-        else
             this->zPicked = (dimensions[2] - 1) - yPosition;
+        else
+            this->zPicked = yPosition;
         
     }else if(coronalView){
         
@@ -272,9 +273,9 @@ void QVTKVolumeSliceWidget::setPickedCoordinates(int xPosition, int yPosition)
         this->yPicked = slice;
         
         if(verticalFlipFlag)
-            this->zPicked = yPosition;
-        else
             this->zPicked = (dimensions[2] - 1) - yPosition;
+        else
+            this->zPicked = yPosition;
         
     }
     
@@ -344,4 +345,9 @@ void QVTKVolumeSliceWidget::setVTKThreeViews(VTKThreeViews * threeViews)
 QVTKWidget* QVTKVolumeSliceWidget::getQVTKWidget()
 {
     return this->qvtkWidget;
+}
+
+int QVTKVolumeSliceWidget::getSlice()
+{
+    return this->slice;
 }

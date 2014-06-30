@@ -186,9 +186,10 @@ void SkinImageSegmentation::computeRegionGrowing()
       regionGrowing->SetInput(thresholdImage);
     
       FloatImageType::SizeType imageSize;
+      
       imageSize = thresholdImage->GetLargestPossibleRegion().GetSize();
     
-      seedPoint[1] = imageSize[1] - seedPoint[1]; 
+      std::cout<<"Seed: "<<seedPoint[0]<<","<<seedPoint[1]<<","<<thresholdImage->GetPixel(seedPoint)<<std::endl;
       
       regionGrowing->SetSeed(seedPoint);
       regionGrowing->SetReplaceValue(255);

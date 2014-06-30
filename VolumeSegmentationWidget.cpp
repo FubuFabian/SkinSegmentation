@@ -255,6 +255,7 @@ void VolumeSegmentationWidget::getCoordinates()
     ui->tableWidget->setItem(0, 0, new QTableWidgetItem(str.setNum(seedPoint[0])));
     ui->tableWidget->setItem(0, 1, new QTableWidgetItem(str.setNum(seedPoint[1])));
     ui->tableWidget->setItem(0, 2, new QTableWidgetItem(str.setNum(seedPoint[2])));
+    ui->tableWidget->setItem(0, 3, new QTableWidgetItem(str.setNum(vtkProbabilityVolume->GetScalarComponentAsDouble(seedPoint[0],seedPoint[1],seedPoint[2],0))));
     //std::cout << "Seed Point -> (x = " << seedPoint[0] << ", y = " << seedPoint[1] << ")" << std::endl;
     
     this->seedPointFlag = true;
@@ -273,6 +274,8 @@ void VolumeSegmentationWidget::newSeed()
     
     ui->tableWidget->setItem(0, 0, new QTableWidgetItem(0));
     ui->tableWidget->setItem(0, 1, new QTableWidgetItem(0));
+    ui->tableWidget->setItem(0, 2, new QTableWidgetItem(0));
+    ui->tableWidget->setItem(0, 3, new QTableWidgetItem(0));
     
     ui->segmentBtn->setEnabled(false);
     ui->saveBtn->setEnabled(false);

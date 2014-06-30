@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>482</width>
-    <height>388</height>
+    <width>584</width>
+    <height>387</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -68,6 +68,11 @@
        <column>
         <property name="text">
          <string>Z</string>
+        </property>
+       </column>
+       <column>
+        <property name="text">
+         <string>Val</string>
         </property>
        </column>
       </widget>
@@ -168,5 +173,128 @@
  </widget>
  <layoutdefault spacing="6" margin="11"/>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>surfaceBtn_2</sender>
+   <signal>clicked()</signal>
+   <receiver>SkinVolumeSegmentationWidget</receiver>
+   <slot>surfaceEnhancement()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>74</x>
+     <y>33</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>94</x>
+     <y>49</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>thresholdBtn_2</sender>
+   <signal>clicked(bool)</signal>
+   <receiver>SkinVolumeSegmentationWidget</receiver>
+   <slot>threshold(bool)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>414</x>
+     <y>31</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>448</x>
+     <y>51</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>upperSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>SkinVolumeSegmentationWidget</receiver>
+   <slot>changeUpperThreshold(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>125</x>
+     <y>72</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>137</x>
+     <y>87</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>lowerSlider</sender>
+   <signal>sliderMoved(int)</signal>
+   <receiver>SkinVolumeSegmentationWidget</receiver>
+   <slot>changeLowerThreshold(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>200</x>
+     <y>108</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>217</x>
+     <y>120</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>deleteSeedBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>SkinVolumeSegmentationWidget</receiver>
+   <slot>deleteSeed()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>421</x>
+     <y>208</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>472</x>
+     <y>228</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>regionGrowingBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>SkinVolumeSegmentationWidget</receiver>
+   <slot>regionGrowing()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>406</x>
+     <y>271</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>476</x>
+     <y>296</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>contourBtn</sender>
+   <signal>clicked()</signal>
+   <receiver>SkinVolumeSegmentationWidget</receiver>
+   <slot>outerContour()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>428</x>
+     <y>324</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>477</x>
+     <y>351</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
+ <slots>
+  <slot>surfaceEnhancement()</slot>
+  <slot>threshold(bool)</slot>
+  <slot>changeLowerThreshold(int)</slot>
+  <slot>changeUpperThreshold(int)</slot>
+  <slot>regionGrowing()</slot>
+  <slot>outerContour()</slot>
+  <slot>deleteSeed()</slot>
+  <slot>getCoordinates()</slot>
+ </slots>
 </ui>

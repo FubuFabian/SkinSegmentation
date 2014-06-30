@@ -744,6 +744,8 @@ void QVTKImageWidget::setPickedCoordinates(int xPosition, int yPosition)
 {
     this->xPicked = xPosition;
     this->yPicked = yPosition;
+    
+    //std::cout<<"Pick: "<<xPicked<<","<<yPicked<<","<<imageViewer->GetInput()->GetScalarComponentAsDouble(xPicked,yPicked,0,0)<<std::endl;
 }
 
 void QVTKImageWidget::setVolumeData(vtkSmartPointer<vtkImageData> volumeData)
@@ -833,3 +835,7 @@ void QVTKImageWidget::setSegmentationTrainingFlag()
     this->segmentationTrainingFlag = true;
 }
 
+int QVTKImageWidget::getSlice()
+{
+    return 0;
+}

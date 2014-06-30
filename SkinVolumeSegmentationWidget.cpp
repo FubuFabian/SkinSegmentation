@@ -51,6 +51,7 @@ SkinVolumeSegmentationWidget::~SkinVolumeSegmentationWidget()
 
 void SkinVolumeSegmentationWidget::surfaceEnhancement()
 {
+        
     this->skinVolumeSegmentation->computeSurfaceVolume(ui->sigmaSize->text().toInt());
 
     this->vtkSurfaceVolume = skinVolumeSegmentation->getSurfaceVolume();
@@ -59,7 +60,6 @@ void SkinVolumeSegmentationWidget::surfaceEnhancement()
     this->displayWidget->setAndDisplayVolume(vtkSurfaceVolume);
 
     this->surfaceVolumeFlag = true;
-
     ui->thresholdBtn_2->setEnabled(true);
 
 }
@@ -187,8 +187,7 @@ void SkinVolumeSegmentationWidget::getCoordinates()
     ui->tableWidget->setItem(numberOfSeeds, 0, new QTableWidgetItem(str.setNum(seedPoint[0])));
     ui->tableWidget->setItem(numberOfSeeds, 1, new QTableWidgetItem(str.setNum(seedPoint[1])));
     ui->tableWidget->setItem(numberOfSeeds, 2, new QTableWidgetItem(str.setNum(seedPoint[2])));
-    
-    std::cout << "Seed Point -> (x = " << seedPoint[0] << ", y = " << seedPoint[1]<< ", z = " << seedPoint[2] << ")" << std::endl;
+    ui->tableWidget->setItem(numberOfSeeds, 3, new QTableWidgetItem(str.setNum(vtkThresholdVolume->GetScalarComponentAsDouble(seedPoint[0],seedPoint[1],seedPoint[2],0))));
 
     this->seedPoints.push_back(seedPoint);
 

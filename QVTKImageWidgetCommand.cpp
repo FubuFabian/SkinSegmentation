@@ -73,6 +73,10 @@ void QVTKImageWidgetCommand<Widget>::Execute(vtkObject* caller, unsigned long ev
   // if the mouse is moving inside the viewer
   if (event == vtkCommand::MouseMoveEvent)
     {
+            
+      int* extent = imageData->GetExtent();
+      int* dimension = imageData->GetDimensions();   
+      double* spacing = imageData->GetSpacing();
                           
       int* windowPosition = interactor->GetEventPosition();
 
@@ -83,47 +87,49 @@ void QVTKImageWidgetCommand<Widget>::Execute(vtkObject* caller, unsigned long ev
       this->Picker->Pick(xWindow, yWindow, zWindow, Viewer->GetRenderer());
 
       double* imPos = this->Picker->GetPickPosition();
-      int xImagePosition = vtkMath::Round(imPos[0]);
-      int yImagePosition = vtkMath::Round(imPos[1]);
-      int zImagePosition = Viewer->GetSlice();
+      
+      int xImagePosition;
+      int yImagePosition;
+      int zImagePosition;
+      
+      std::string message;
+      
+      if(qVTKVolumeSliceWidgetFlag){   
+          
+           xImagePosition = vtkMath::Round(imPos[0]/spacing[0]);
+           yImagePosition = vtkMath::Round(imPos[1]/spacing[1]);
+           zImagePosition = 0;
+           
+           message = "Location: ( "
+              + vtkVariant(xImagePosition).ToString() + ", "
+              + vtkVariant(yImagePosition).ToString() + ", "
+              + vtkVariant(zImagePosition).ToString() + ")";
+           
+           this->ImageWidget->setPickedCoordinates(xImagePosition,yImagePosition);
+           
+      }else if(qVTKImageWidgetFlag){
+          
+           xImagePosition = vtkMath::Round(imPos[0]);
+           yImagePosition = vtkMath::Round(imPos[1]);
+           zImagePosition = Viewer->GetSlice();
+           
+           int center[2];
+           center[0] = floor((float)dimension[0]/2);
+           center[1] = floor((float)dimension[1]/2);
       
       
-      int* extent = imageData->GetExtent();
-      int* dimension = imageData->GetDimensions();   
-      
-      int center[2];
-      center[0] = floor((float)dimension[0]/2);
-      center[1] = floor((float)dimension[1]/2);
-      
-      if(qVTKVolumeSliceWidgetFlag){
-          xImagePosition = (xImagePosition - extent[0] + center[0]);
-          yImagePosition = (yImagePosition - extent[2] + center[1]);
-      }
-      
-      
-      int xClipPosition = (xImagePosition - extent[0]);
-      int yClipPosition = (dimension[1]-1) - (yImagePosition - extent[2]);
-	
-      //  int yClipPosition = (yImagePosition );
-      int zClipPosition = zImagePosition - extent[4];
-      
-      
-      typename std::stringstream xx;
-          xx << xImagePosition;
-          typename  std::stringstream yy;
-          yy << yImagePosition;
-          typename  std::stringstream zz;
-          zz << zImagePosition;
-      
-      std::string message = "Location: ( "
+           int xClipPosition = (xImagePosition - extent[0]);
+           int yClipPosition = (dimension[1]-1) - (yImagePosition - extent[2]);
+           int zClipPosition = zImagePosition - extent[4];
+                      
+           message = "Location: ( "
               + vtkVariant(xClipPosition).ToString() + ", "
               + vtkVariant(yClipPosition).ToString() + ", "
               + vtkVariant(zClipPosition).ToString() + ")";
-      
-      if(qVTKVolumeSliceWidgetFlag)
-          this->ImageWidget->setPickedCoordinates(xImagePosition,yImagePosition);
-      else if(qVTKImageWidgetFlag)
-          this->ImageWidget->setPickedCoordinates(xClipPosition,yClipPosition);
+           
+           this->ImageWidget->setPickedCoordinates(xImagePosition,yImagePosition);
+          
+      }         
       
       // for display pixel value when mouse move
       // We have to handle different number of scalar components.

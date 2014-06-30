@@ -121,6 +121,8 @@ public:
     void setVTKThreeViews(VTKThreeViews * vtkThreeViews);
     
     QVTKWidget* getQVTKWidget();
+    
+    int getSlice();
 
 private:
 
